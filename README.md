@@ -1,7 +1,8 @@
 # Projeto-calculadora
-Projeto de calculadora em Java com intuito de aprender lógica de programação, funções/métodos, encapsulamento, tratamento de erros e exceções e funções do Java.
+Projeto de calculadora em Java com intuito de aprender lógica de programação, funções/métodos, encapsulamento, tratamento de erros e exceções e outras diversas funções do Java.
 
 Próximas melhorias e implementações para o projeto:
+- Adicionar função de raíz quadrada e raíz cúbica.
 - Diminuir código transformando trechos de código em funções.
 - Fazer cálculos maiores em uma só linha.
 - Criar menu de boas vindas dando a opção de executar o cálculo em uma só linha ou fazer passa a passo.
