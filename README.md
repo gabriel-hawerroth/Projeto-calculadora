@@ -25,4 +25,4 @@ Para utilizar e testar a calculadora, deve-se executar o arquivo através do CMD
 - Na seção "Variáveis do sistema", encontre a variável "Path" e clique em "Editar".
 - Clique no botão "Novo" e adicione o caminho completo para a pasta "bin" do JDK (por exemplo, "C:\Program Files\Java\jdk-17.0.1\bin").
 - Clique em "OK" para fechar todas as janelas de configurações e salvar as alterações.
--Agora você pode abrir um prompt de comando (ou terminal) e digitar "java -version" para verificar se o Java está instalado e qual é a versão. Se o comando retornar a versão do Java, o caminho para o JDK foi configurado corretamente na variável PATH do sistema. !
+- Agora você pode abrir um prompt de comando (ou terminal) e digitar "java -version" para verificar se o Java está instalado e qual é a versão. Se o comando retornar a versão do Java, o caminho para o JDK foi configurado corretamente na variável PATH do sistema. !
