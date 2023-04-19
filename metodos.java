@@ -1,4 +1,4 @@
-package codigos;
+package calculadora;
 
 public class metodos {
 

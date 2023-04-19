@@ -1,4 +1,4 @@
-package codigos;
+package calculadora;
 
 import java.util.Scanner;
 import java.text.DecimalFormat;
