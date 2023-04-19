@@ -1,3 +1,5 @@
+package codigos;
+
 public class metodos {
 
 	public double somar(double a, double b) {
@@ -21,6 +23,15 @@ public class metodos {
 
 	public double impar_par(double a) {
 		return a % 2;
+	}
+
+	public double raizQuadrada(double a) {
+		return Math.sqrt(a);
+	}
+
+	public double raizCubica(double a) {
+		int aInteiro = (int) a;
+		return aInteiro;
 	}
 
 }

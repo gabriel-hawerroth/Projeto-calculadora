@@ -1,3 +1,5 @@
+package codigos;
+
 import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
@@ -11,7 +13,8 @@ public class calculadora {
 		boolean continua = true;
 
 		Scanner sc = new Scanner(System.in);
-		DecimalFormat df = new DecimalFormat("0.#################################################");
+		DecimalFormat df = new DecimalFormat("0.#");
+		df.setMaximumFractionDigits(15);
 
 		metodos met = new metodos();
 		menu menu = new menu();
@@ -70,9 +73,12 @@ public class calculadora {
 					}
 				}
 				continue;
-			} else if (opcao == 6) {
+			} else if (opcao == 6){
+				resultado = met.raizQuadrada(n1);
+				System.out.println(n1);
+			} else if (opcao == 8) {
 				break;
-			} else if (opcao <= 0 || opcao >= 7) {
+			} else if (opcao <= 0 || opcao >= 9) {
 				System.out.println("");
 				System.out.println("Opção inválida, reiniciando cálculo");
 				continue;
