@@ -1,5 +1,3 @@
-package calculadora;
-
 public class metodos {
 
 	public double somar(double a, double b) {

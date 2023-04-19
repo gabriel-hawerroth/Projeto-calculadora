@@ -1,5 +1,3 @@
-package calculadora;
-
 public class menu {
     
     public void exibirMenu(){

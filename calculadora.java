@@ -1,5 +1,3 @@
-package calculadora;
-
 import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
