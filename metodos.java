@@ -30,8 +30,7 @@ public class metodos {
 	}
 
 	public double raizCubica(double a) {
-		int aInteiro = (int) a;
-		return aInteiro;
+		return Math.cbrt(a);
 	}
 
 }

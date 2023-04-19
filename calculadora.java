@@ -14,7 +14,7 @@ public class calculadora {
 
 		Scanner sc = new Scanner(System.in);
 		DecimalFormat df = new DecimalFormat("0.#");
-		df.setMaximumFractionDigits(15);
+		df.setMaximumFractionDigits(5);
 
 		metodos met = new metodos();
 		menu menu = new menu();
@@ -35,17 +35,87 @@ public class calculadora {
 			}
 
 			if (opcao == 5) {
+				if (n1 - (int) n1 == 0) {
+					resultado = met.raizQuadrada(n1);
+					System.out.println("");
+					System.out.println("A raíz quadrada de " + df.format(n1) + " é " + df.format(resultado) + ".");
+				} else {
+					System.out.println("");
+					System.out.println("Só é possível calcular a raíz quadrada de um número inteiro.");
+				}
+				boolean continuaRaizQuadrada = true;
+				while (continuaRaizQuadrada) {
+					double x;
+					System.out.println("");
+					System.out.println("1 - Continuar");
+					System.out.println("2 - Encerrar calculadora");
+					try {
+						x = sc.nextDouble();
+					} catch (InputMismatchException erro) {
+						System.out.println("");
+						System.out.println("O valor deve ser um número!");
+						sc.nextLine();
+						continue;
+					}
+					if (x == 1) {
+						continuaRaizQuadrada = false;
+					} else if (x == 2) {
+						continuaRaizQuadrada = false;
+						continua = false;
+					} else {
+						System.out.println("");
+						System.out.println("Opção inválida.");
+						continue;
+					}
+				}
+				continue;
+			} else if (opcao == 6){
+				if (n1 - (int) n1 == 0) {
+					resultado = met.raizCubica(n1);
+					System.out.println("");
+					System.out.println("A raíz cúbica de " + df.format(n1) + " é " + df.format(resultado) + ".");
+				} else {
+					System.out.println("");
+					System.out.println("Só é possível calcular a raíz cúbica de um número inteiro.");
+				}
+				boolean continuaRaizCubica = true;
+				while (continuaRaizCubica) {
+					double x;
+					System.out.println("");
+					System.out.println("1 - Continuar");
+					System.out.println("2 - Encerrar calculadora");
+					try {
+						x = sc.nextDouble();
+					} catch (InputMismatchException erro) {
+						System.out.println("");
+						System.out.println("O valor deve ser um número!");
+						sc.nextLine();
+						continue;
+					}
+					if (x == 1) {
+						continuaRaizCubica = false;
+					} else if (x == 2) {
+						continuaRaizCubica = false;
+						continua = false;
+					} else {
+						System.out.println("");
+						System.out.println("Opção inválida.");
+						continue;
+					}
+				}
+				continue;
+			} else if (opcao == 7) {
 
 				boolean continuaImparPar = true;
 				resultado = met.impar_par(n1);
 				System.out.println("");
 
 				if (resultado == 1) {
-					System.out.println("O número " + df.format(n1) + " é ímpar");
+					System.out.println("O número " + df.format(n1) + " é ímpar.");
 				} else if (resultado == 0) {
-					System.out.println("O número " + df.format(n1) + " é par");
+					System.out.println("O número " + df.format(n1) + " é par.");
 				} else {
-					System.out.println("A definição de ímpar ou par se aplica apenas a números inteiros");
+					System.out.println("A definição de ímpar ou par se aplica apenas a números inteiros.");
 				}
 
 				while (continuaImparPar) {
@@ -73,14 +143,11 @@ public class calculadora {
 					}
 				}
 				continue;
-			} else if (opcao == 6){
-				resultado = met.raizQuadrada(n1);
-				System.out.println(n1);
 			} else if (opcao == 8) {
 				break;
 			} else if (opcao <= 0 || opcao >= 9) {
 				System.out.println("");
-				System.out.println("Opção inválida, reiniciando cálculo");
+				System.out.println("Opção inválida, reiniciando cálculo.");
 				continue;
 			}
 
@@ -90,7 +157,7 @@ public class calculadora {
 				n2 = sc.nextDouble();
 			} catch (InputMismatchException erro) {
 				System.out.println("");
-				System.out.println("O valor deve ser um número! reiniciando cálculo");
+				System.out.println("O valor deve ser um número! reiniciando cálculo.");
 				sc.nextLine();
 				continue;
 			}
@@ -100,29 +167,29 @@ public class calculadora {
 					resultado = met.somar(n1, n2);
 					System.out.println("");
 					System.out.println("O resultado de " + df.format(n1) + " + " + df.format(n2) + " é igual a: "
-							+ df.format(resultado));
+							+ df.format(resultado) + ".");
 					break;
 				case 2:
 					resultado = met.subtrair(n1, n2);
 					System.out.println("");
 					System.out.println("O resultado de " + df.format(n1) + " - " + df.format(n2) + " é igual a: "
-							+ df.format(resultado));
+							+ df.format(resultado) + ".");
 					break;
 				case 3:
 					resultado = met.multiplicar(n1, n2);
 					System.out.println("");
 					System.out.println("O resultado de " + df.format(n1) + " * " + df.format(n2) + " é igual a: "
-							+ df.format(resultado));
+							+ df.format(resultado) + ".");
 					break;
 				case 4:
 					resultado = met.dividir(n1, n2);
 					System.out.println("");
 					System.out.println("O resultado de " + df.format(n1) + " / " + df.format(n2) + " é igual a: "
-							+ df.format(resultado));
+							+ df.format(resultado) + ".");
 					break;
 				default:
 					System.out.println("");
-					System.out.println("Inválido");
+					System.out.println("Opção inválida.");
 					break;
 			}
 
@@ -228,7 +295,7 @@ public class calculadora {
 					sc.nextLine();
 					break;
 				}
-				
+
 				if (i == 3) {
 					continua = false;
 				}
