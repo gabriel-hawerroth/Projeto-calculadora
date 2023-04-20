@@ -97,9 +97,11 @@ public class calculadora {
 						}
 						if (x == 1) {
 							continuaRaizQuadrada = false;
+							passoAPasso = false;
 						} else if (x == 2) {
 							continuaRaizQuadrada = false;
 							passoAPasso = false;
+							continuaCalculadora = false;
 						} else {
 							System.out.println("");
 							System.out.println("Opção inválida.");
@@ -132,9 +134,11 @@ public class calculadora {
 						}
 						if (x == 1) {
 							continuaRaizCubica = false;
+							passoAPasso = false;
 						} else if (x == 2) {
 							continuaRaizCubica = false;
 							passoAPasso = false;
+							continuaCalculadora = false;
 						} else {
 							System.out.println("");
 							System.out.println("Opção inválida.");
@@ -171,9 +175,11 @@ public class calculadora {
 						}
 						if (x == 1) {
 							continuaImparPar = false;
+							passoAPasso = false;
 						} else if (x == 2) {
 							continuaImparPar = false;
 							passoAPasso = false;
+							continuaCalculadora = false;
 						} else {
 							System.out.println("");
 							System.out.println("Opção inválida.");
@@ -182,10 +188,12 @@ public class calculadora {
 					}
 					continue;
 				} else if (opcao == 8) {
+					passoAPasso = false;
+					continuaCalculadora = false;
 					break;
 				} else if (opcao <= 0 || opcao >= 9) {
 					System.out.println("");
-					System.out.println("Opção inválida, reiniciando passo a passo.");
+					System.out.println("Opção inválida, reiniciando.");
 					continue;
 				}
 
@@ -195,7 +203,7 @@ public class calculadora {
 					n2 = sc.nextDouble();
 				} catch (InputMismatchException erro) {
 					System.out.println("");
-					System.out.println("O valor deve ser um número! Reiniciando passo a passo.");
+					System.out.println("O valor deve ser um número! Reiniciando.");
 					sc.nextLine();
 					continue;
 				}
@@ -239,9 +247,13 @@ public class calculadora {
 					i = sc.nextInt();
 				} catch (InputMismatchException erro) {
 					System.out.println("");
-					System.out.println("O valor deve ser um número! Reiniciando passo a passo.");
+					System.out.println("O valor deve ser um número! Reiniciando.");
 					sc.nextLine();
-					continue;
+					break;
+				}
+				if (i == 1){
+					passoAPasso = false;
+					break;
 				}
 
 				while (i == 2) {    							/* enquanto quiser continuar com o último valor */
