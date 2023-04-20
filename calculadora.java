@@ -29,7 +29,7 @@ public class calculadora {
 				opcao = sc.nextInt();
 			} catch (InputMismatchException erro) {
 				System.out.println("");
-				System.out.println("O valor deve ser um número! reiniciando cálculo");
+				System.out.println("O valor deve ser um número! Reiniciando cálculo.");
 				sc.nextLine();
 				continue;
 			}
@@ -38,10 +38,10 @@ public class calculadora {
 				if (n1 - (int) n1 == 0) {
 					resultado = met.raizQuadrada(n1);
 					System.out.println("");
-					System.out.println("A raíz quadrada de " + df.format(n1) + " é " + df.format(resultado) + ".");
+					System.out.println("A raiz quadrada de " + df.format(n1) + " é " + df.format(resultado) + ".");
 				} else {
 					System.out.println("");
-					System.out.println("Só é possível calcular a raíz quadrada de um número inteiro.");
+					System.out.println("Só é possível calcular a raiz quadrada de um número inteiro.");
 				}
 				boolean continuaRaizQuadrada = true;
 				while (continuaRaizQuadrada) {
@@ -73,10 +73,10 @@ public class calculadora {
 				if (n1 - (int) n1 == 0) {
 					resultado = met.raizCubica(n1);
 					System.out.println("");
-					System.out.println("A raíz cúbica de " + df.format(n1) + " é " + df.format(resultado) + ".");
+					System.out.println("A raiz cúbica de " + df.format(n1) + " é " + df.format(resultado) + ".");
 				} else {
 					System.out.println("");
-					System.out.println("Só é possível calcular a raíz cúbica de um número inteiro.");
+					System.out.println("Só é possível calcular a raiz cúbica de um número inteiro.");
 				}
 				boolean continuaRaizCubica = true;
 				while (continuaRaizCubica) {
@@ -157,7 +157,7 @@ public class calculadora {
 				n2 = sc.nextDouble();
 			} catch (InputMismatchException erro) {
 				System.out.println("");
-				System.out.println("O valor deve ser um número! reiniciando cálculo.");
+				System.out.println("O valor deve ser um número! Reiniciando cálculo.");
 				sc.nextLine();
 				continue;
 			}
@@ -201,7 +201,7 @@ public class calculadora {
 				i = sc.nextInt();
 			} catch (InputMismatchException erro) {
 				System.out.println("");
-				System.out.println("O valor deve ser um número! reiniciando calculadora");
+				System.out.println("O valor deve ser um número! Reiniciando calculadora.");
 				sc.nextLine();
 				continue;
 			}
@@ -219,7 +219,7 @@ public class calculadora {
 					n4 = sc.nextDouble();
 				} catch (InputMismatchException erro) {
 					System.out.println("");
-					System.out.println("O valor deve ser um número! reiniciando cálculo");
+					System.out.println("O valor deve ser um número! Reiniciando cálculo.");
 					sc.nextLine();
 					continue;
 				}
@@ -257,7 +257,7 @@ public class calculadora {
 
 					default:
 						System.out.println("");
-						System.out.println("Inválido");
+						System.out.println("Inválido.");
 						i = 4;
 				}
 
@@ -269,7 +269,7 @@ public class calculadora {
 					i = sc.nextInt();
 				} catch (InputMismatchException erro) {
 					System.out.println("");
-					System.out.println("O valor deve ser um número! reiniciando calculadora");
+					System.out.println("O valor deve ser um número! Reiniciando calculadora.");
 					sc.nextLine();
 					break;
 				}
@@ -283,7 +283,7 @@ public class calculadora {
 
 			while (i != 1 && i != 2 && i != 3) {
 				System.out.println("");
-				System.out.println("Opção inválida");
+				System.out.println("Opção inválida.");
 				System.out.println("1 - Continuar");
 				System.out.println("2 - Continuar, mas com o último número");
 				System.out.println("3 - Encerrar calculadora");
@@ -291,7 +291,7 @@ public class calculadora {
 					i = sc.nextInt();
 				} catch (InputMismatchException erro) {
 					System.out.println("");
-					System.out.println("O valor deve ser um número! reiniciando calculadora");
+					System.out.println("O valor deve ser um número! Reiniciando calculadora.");
 					sc.nextLine();
 					break;
 				}
