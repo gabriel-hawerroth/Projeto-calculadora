@@ -11,7 +11,7 @@ Próximas melhorias e implementações para o projeto:
 
 Para utilizar e testar a calculadora, deve-se executar o arquivo através do CMD no Windows seguindo as seguintes etapas:
 
-- Faça o download dos três arquivos do projeto, e coloque-os em uma pasta;
+- Faça o download do ZIP do projeto e extraia a pasta para remover o ZIP;
 - Abra o prompt de comando: pressione a tecla "Windows" e a tecla "R" ao mesmo tempo, digite "cmd" e pressione "Enter";
 - Navegue até a pasta que contém o arquivo Java a ser executado usando o comando "cd". Por exemplo, se o arquivo está na pasta "C:\meu_projeto", você pode navegar até essa pasta digitando "cd C:\meu_projeto" no prompt de comando e pressionando "Enter";
 - Compile o arquivo Java (se ainda não tiver sido compilado) usando o comando "javac" seguido do nome do arquivo. Por exemplo, se o arquivo se chama "MeuPrograma.java", digite "javac MeuPrograma.java" e pressione "Enter". Isso irá compilar o arquivo e gerar o arquivo ".class" correspondente;
