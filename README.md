@@ -5,7 +5,6 @@ Próximas melhorias e implementações para o projeto:
 - Diminuir código transformando trechos de código em funções;
 - Fazer cálculos maiores em uma só linha;
 - Elaborar modelo de classes do projeto utilizando o draw.io;
-- Criar menu de boas vindas dando a opção de executar o cálculo em uma só linha ou fazer passa a passo;
 - Conectar a um banco de dados para salvar todos os cálculos realizados;
 - Implementar um framework para rodar na web.
 
