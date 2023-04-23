@@ -77,13 +77,15 @@ public class Calculadora {
 					continue;
 				} else if (opcao == 7) {
 					obterImparPar(n1);
-					continue;
-
+                    continue;
 				} else if (opcao == 8) {
+					i = 3;
 					break;
 				} else if (opcao <= 0 || opcao >= 9) {
 					print("");
 					print("Opção inválida, reiniciando passo a passo.");
+					System.out.println("");
+					System.out.println("Opção inválida, reiniciando.");
 					continue;
 				}
 
@@ -98,21 +100,23 @@ public class Calculadora {
 					continue;
 				}
 
-				obterResultados(n1, n2, resultado);
+				obterResultado(n1, n2, resultado);
 
 				exibirMenuContinuar();
 				try {
 					i = sc.nextInt();
 				} catch (InputMismatchException erro) {
 					print("");
-					print("O valor deve ser um número! Reiniciando passo a passo.");
+					print("O valor deve ser um número! Reiniciando calculadora.");
 					sc.nextLine();
+					break;
+				}
+				if (i == 1){
 					continue;
 				}
 
 				while (i == 2) { /* enquanto quiser continuar com o último valor */
 					n3 = resultado;
-					print("");
 					try {
 						exibirMenuOperacao();
 						opcao = sc.nextInt();
@@ -151,7 +155,7 @@ public class Calculadora {
 						continue;
 					}
 
-					obterResultados(n3, n4, resultado);
+					obterResultado2(n3, n4, resultado);
 
 					exibirMenuContinuar();
 					try {
@@ -398,31 +402,31 @@ public class Calculadora {
 
 	}
 
-	private static void obterResultados(double num1, double num2, double result) {
+	private static void obterResultado(double num1, double num2, double result) {
 		switch (opcao) {
 			case 1:
-				result = somar(result, num1);
+				result = somar(num1, num2);
 				print("");
 				System.out
 						.println("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
 								+ df.format(result));
 				break;
 			case 2:
-				result = subtrair(result, num1);
+				result = subtrair(num1, num2);
 				print("");
 				System.out
 						.println("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
 								+ df.format(result));
 				break;
 			case 3:
-				result = multiplicar(result, num1);
+				result = multiplicar(num1, num2);
 				print("");
 				System.out
 						.println("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
 								+ df.format(result));
 				break;
 			case 4:
-				result = dividir(result, num1);
+				result = dividir(num1, num2);
 				print("");
 				System.out
 						.println("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
@@ -434,6 +438,46 @@ public class Calculadora {
 				print("Inválido.");
 				i = 4;
 		}
+		resultado = result;
+	}
+
+	private static void obterResultado2(double num1, double num2, double result) {
+		switch (opcao) {
+			case 1:
+				result = somar(result, num2);
+				print("");
+				System.out
+						.println("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
+								+ df.format(result));
+				break;
+			case 2:
+				result = subtrair(result, num2);
+				print("");
+				System.out
+						.println("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
+								+ df.format(result));
+				break;
+			case 3:
+				result = multiplicar(result, num2);
+				print("");
+				System.out
+						.println("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
+								+ df.format(result));
+				break;
+			case 4:
+				result = dividir(result, num2);
+				print("");
+				System.out
+						.println("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
+								+ df.format(result));
+				break;
+
+			default:
+				print("");
+				print("Inválido.");
+				i = 4;
+		}
+		resultado = result;
 	}
 
 }
