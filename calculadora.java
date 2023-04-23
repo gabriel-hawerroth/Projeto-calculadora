@@ -10,16 +10,14 @@ public class Calculadora {
 	static int i, opcao, menuInicial;
 	static double resultado = 0, n1, n2, n3, n4;
 
-	static DecimalFormat df;
-	static Scanner sc;
+	static DecimalFormat df = new DecimalFormat("0.#");
+	static Scanner sc = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
-		sc = new Scanner(System.in);
-		df = new DecimalFormat("0.#");
-		df.setMaximumFractionDigits(5);
-
 		while (continuaCalculadora) { /* começo calculadora */
+			
+			df.setMaximumFractionDigits(5);
 
 			boolean continuaMenuInicial = true, umaLinha = false, passoAPasso = false;
 			while (continuaMenuInicial) {
@@ -111,9 +109,6 @@ public class Calculadora {
 					sc.nextLine();
 					break;
 				}
-				if (i == 1){
-					continue;
-				}
 
 				while (i == 2) { /* enquanto quiser continuar com o último valor */
 					n3 = resultado;
@@ -169,7 +164,9 @@ public class Calculadora {
 					continue;
 				}
 
-				if (i == 3) {
+				if (i == 1){
+					continue;
+				} else if (i == 3) {
 					passoAPasso = false;
 					break;
 				} else if (i == 4) {
@@ -206,10 +203,7 @@ public class Calculadora {
 
 
 
-
-
-
-
+// métodos
 
 	private static void print(String texto) {
 		System.out.println(texto);
