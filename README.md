@@ -2,7 +2,6 @@
 Projeto de calculadora em Java com intuito de aprender lógica de programação, funções/métodos, encapsulamento, tratamento de erros e exceções e outras diversas funções do Java.
 
 Próximas melhorias e implementações para o projeto:
-- Diminuir código transformando trechos de código em funções;
 - Fazer cálculos maiores em uma só linha;
 - Elaborar modelo de classes do projeto utilizando o draw.io;
 - Conectar a um banco de dados para salvar todos os cálculos realizados;
