@@ -11,23 +11,24 @@ public class Calculadora {
 	static double resultado = 0, n1, n2, n3, n4;
 
 	static DecimalFormat df = new DecimalFormat("0.#");
-	static Scanner sc = new Scanner(System.in);
+	static Scanner sca = new Scanner(System.in);
+	static Scanner scb = new Scanner(System.in);
 
 	public static void main(String[] args) {
 
 		while (continuaCalculadora) { /* começo calculadora */
-			
-			df.setMaximumFractionDigits(5);
 
+			df.setMaximumFractionDigits(5);
 			boolean continuaMenuInicial = true, umaLinha = false, passoAPasso = false;
+
 			while (continuaMenuInicial) {
 				exibirMenuInicial();
 				try {
-					menuInicial = sc.nextInt();
+					menuInicial = sca.nextInt();
 				} catch (InputMismatchException erro) {
 					print("");
 					print("O valor deve ser um número!");
-					sc.nextLine();
+					sca.nextLine();
 					continue;
 				}
 				if (menuInicial == 1) {
@@ -47,9 +48,89 @@ public class Calculadora {
 			}
 
 			while (umaLinha) { /* inicia calculadora na função única linha */
+				
+				String calculo = "";
+				int numIndex = 0;
+				int opIndex = 0;
+
 				print("");
-				print("Função em desenvolvimento, aguarde.");
-				break;
+				print("Exemplo de como o cálculo deve ser digitado: '10 + 10'; '2 * 10 + 70 / 3'; '1,5 * 10 - 4'.");
+				print("Sempre com espaços entre cada número/operador, ao escrever todo o cálculo pressione enter.");
+				print("Operadores aceitos: +, -, *, /.");
+				print("O cálculo é realizado em ordem sequencial, sem obedecer a regra matemática de ordem das operações.");
+				print("Digite o cálculo:");
+				calculo = scb.nextLine();
+
+				String[] partes = calculo.split(" ");
+				Double[] numeros = new Double[partes.length];
+				String[] operadores = new String[partes.length];
+
+				for (String parte : partes) {
+					try {
+						Double num = Double.parseDouble(parte);
+						numeros[numIndex++] = num;
+					} catch (NumberFormatException e) {
+						operadores[opIndex++] = parte;
+					}
+				}
+
+				for (int i = 0; i < numIndex; i++) {
+					if (operadores[i] != "+"){
+						
+					}
+				}
+
+				/* if (operadores[opIndex] != "+" && operadores[opIndex] != "-" && operadores[opIndex] != "*" && operadores[opIndex] != "/") {
+					print("");
+					print("Você digitou um operador inválido");
+				} */
+
+				for (int i = 0; i < numIndex; i++) {
+					print("Número: " + numeros[i]);
+				}
+				for (int i = 0; i < opIndex; i++) {
+					print("Operador: " + operadores[i]);
+				}
+				
+
+				exibirMenuContinuar2();
+				try {
+					i = sca.nextInt();
+				} catch (InputMismatchException erro) {
+					print("");
+					print("O valor deve ser um número! Reiniciando calculadora.");
+					sca.nextLine();
+					break;
+				}
+
+				if (i == 1) {
+					continue;
+				} else if (i == 2) {
+					passoAPasso = false;
+					break;
+				} else if (i == 3) {
+					passoAPasso = false;
+					continuaCalculadora = false;
+					break;
+				}
+
+				while (i != 1 && i != 2 && i != 3) {
+					exibirMenuInvalido();
+					try {
+						i = sca.nextInt();
+					} catch (InputMismatchException erro) {
+						print("");
+						print("O valor deve ser um número! Reiniciando calculadora.");
+						sca.nextLine();
+						break;
+					}
+
+					if (i == 3) {
+						passoAPasso = false;
+						continuaCalculadora = false;
+					}
+				}
+
 			}
 
 			while (passoAPasso) { /* inicia calculadora na função passo a passo */
@@ -57,13 +138,13 @@ public class Calculadora {
 				print("");
 				print("Digite o primeiro valor:");
 				try {
-					n1 = sc.nextDouble();
+					n1 = sca.nextDouble();
 					exibirMenuOperacao();
-					opcao = sc.nextInt();
+					opcao = sca.nextInt();
 				} catch (InputMismatchException erro) {
 					print("");
 					print("O valor deve ser um número! Reiniciando.");
-					sc.nextLine();
+					sca.nextLine();
 					continue;
 				}
 
@@ -75,7 +156,7 @@ public class Calculadora {
 					continue;
 				} else if (opcao == 7) {
 					obterImparPar(n1);
-                    continue;
+					continue;
 				} else if (opcao == 8) {
 					i = 3;
 					break;
@@ -90,11 +171,11 @@ public class Calculadora {
 				print("");
 				print("Digite o segundo valor:");
 				try {
-					n2 = sc.nextDouble();
+					n2 = sca.nextDouble();
 				} catch (InputMismatchException erro) {
 					print("");
 					print("O valor deve ser um número! Reiniciando passo a passo.");
-					sc.nextLine();
+					sca.nextLine();
 					continue;
 				}
 
@@ -102,11 +183,11 @@ public class Calculadora {
 
 				exibirMenuContinuar();
 				try {
-					i = sc.nextInt();
+					i = sca.nextInt();
 				} catch (InputMismatchException erro) {
 					print("");
 					print("O valor deve ser um número! Reiniciando calculadora.");
-					sc.nextLine();
+					sca.nextLine();
 					break;
 				}
 
@@ -114,11 +195,11 @@ public class Calculadora {
 					n3 = resultado;
 					try {
 						exibirMenuOperacao();
-						opcao = sc.nextInt();
+						opcao = sca.nextInt();
 					} catch (InputMismatchException erro) {
 						print("");
 						print("O valor deve ser um número! Reiniciando cálculo.");
-						sc.nextLine();
+						sca.nextLine();
 						continue;
 					}
 					if (opcao == 5) {
@@ -142,11 +223,11 @@ public class Calculadora {
 					print("");
 					print("Informe o valor:");
 					try {
-						n4 = sc.nextDouble();
+						n4 = sca.nextDouble();
 					} catch (InputMismatchException erro) {
 						print("");
 						print("O valor deve ser um número! Reiniciando cálculo.");
-						sc.nextLine();
+						sca.nextLine();
 						continue;
 					}
 
@@ -154,17 +235,17 @@ public class Calculadora {
 
 					exibirMenuContinuar();
 					try {
-						i = sc.nextInt();
+						i = sca.nextInt();
 					} catch (InputMismatchException erro) {
 						print("");
 						print("O valor deve ser um número! Reiniciando calculadora.");
-						sc.nextLine();
+						sca.nextLine();
 						break;
 					}
 					continue;
 				}
 
-				if (i == 1){
+				if (i == 1) {
 					continue;
 				} else if (i == 3) {
 					passoAPasso = false;
@@ -175,14 +256,14 @@ public class Calculadora {
 					break;
 				}
 
-				while (i != 1 && i != 2 && i != 3) {
+				while (i != 1 && i != 2 && i != 3 && i != 4) {
 					exibirMenuInvalido();
 					try {
-						i = sc.nextInt();
+						i = sca.nextInt();
 					} catch (InputMismatchException erro) {
 						print("");
 						print("O valor deve ser um número! Reiniciando calculadora.");
-						sc.nextLine();
+						sca.nextLine();
 						break;
 					}
 
@@ -197,13 +278,12 @@ public class Calculadora {
 		print("");
 		print("Calculadora encerrada.");
 		continuaCalculadora = false;
-		sc.close();
+		sca.close();
+		scb.close();
 
 	}
 
-
-
-// métodos
+	// métodos
 
 	private static void print(String texto) {
 		System.out.println(texto);
@@ -270,6 +350,13 @@ public class Calculadora {
 		print("4 - Encerrar calculadora");
 	}
 
+	private static void exibirMenuContinuar2() {
+		print("");
+		print("1 - Continuar");
+		print("2 - Voltar para o menu inicial");
+		print("3 - Encerrar calculadora");
+	}
+
 	private static void exibirMenuInvalido() {
 		print("");
 		print("Opção inválida.");
@@ -295,11 +382,11 @@ public class Calculadora {
 			print("1 - Continuar");
 			print("2 - Encerrar calculadora");
 			try {
-				x = sc.nextInt();
+				x = sca.nextInt();
 			} catch (InputMismatchException erro) {
 				print("");
 				print("O valor deve ser um número!");
-				sc.nextLine();
+				sca.nextLine();
 				continue;
 			}
 			if (x == 1) {
@@ -333,11 +420,11 @@ public class Calculadora {
 			print("1 - Continuar");
 			print("2 - Encerrar calculadora");
 			try {
-				x = sc.nextDouble();
+				x = sca.nextDouble();
 			} catch (InputMismatchException erro) {
 				print("");
 				print("O valor deve ser um número!");
-				sc.nextLine();
+				sca.nextLine();
 				continue;
 			}
 			if (x == 1) {
@@ -374,11 +461,11 @@ public class Calculadora {
 			print("1 - Continuar");
 			print("2 - Encerrar calculadora");
 			try {
-				x = sc.nextDouble();
+				x = sca.nextDouble();
 			} catch (InputMismatchException erro) {
 				print("");
 				print("O valor deve ser um número!");
-				sc.nextLine();
+				sca.nextLine();
 				continue;
 			}
 			if (x == 1) {
