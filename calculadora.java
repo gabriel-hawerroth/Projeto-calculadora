@@ -76,12 +76,24 @@ public class Calculadora {
 					for (int x = 0; x < opIndex; x++) {
 						if (!operadores[x].equals("+") && (!operadores[x].equals("-")) && (!operadores[x].equals("*")) && (!operadores[x].equals("/"))) {
 							print("");
-							print("Você digitou algo inválido");
+							print("Você digitou algo inválido!");
 							invalido = true;
 							break;
 						} else if (invalido == false) {
 							if (operadores[x].equals("+")) {
-								resultado = numeros[x] + numeros[x++];
+								resultado = numeros[0] + numeros[1];
+								print("");
+								print("O resultado é: " + df.format(resultado));
+							} else if (operadores[x].equals("-")) {
+								resultado = numeros[0] - numeros[1];
+								print("");
+								print("O resultado é: " + df.format(resultado));
+							} else if (operadores[x].equals("*")) {
+								resultado = numeros[0] * numeros[1];
+								print("");
+								print("O resultado é: " + df.format(resultado));
+							} else if (operadores[x].equals("/")) {
+								resultado = numeros[0] / numeros[1];
 								print("");
 								print("O resultado é: " + df.format(resultado));
 							}
@@ -110,10 +122,10 @@ public class Calculadora {
 					}
 
 					if (i == 2) {
-						passoAPasso = false;
+						umaLinha = false;
 						break;
 					} else if (i == 3) {
-						passoAPasso = false;
+						umaLinha = false;
 						continuaCalculadora = false;
 						break;
 					}
@@ -130,7 +142,7 @@ public class Calculadora {
 						}
 
 						if (i == 3) {
-							passoAPasso = false;
+							umaLinha = false;
 							continuaCalculadora = false;
 						}
 					}
