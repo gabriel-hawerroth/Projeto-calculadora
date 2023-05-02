@@ -49,73 +49,57 @@ public class Calculadora {
 
 			while (umaLinha) { /* inicia calculadora na função única linha */
 				
-				String calculo = "";
-				int numIndex = 0;
-				int opIndex = 0;
+				int i = 1;
+				exibirMenuUnicaLinha();
 
-				print("");
-				print("Exemplo de como o cálculo deve ser digitado: '10 + 10'; '2 * 10 + 70 / 3'; '1,5 * 10 - 4'.");
-				print("Sempre com espaços entre cada número/operador, ao escrever todo o cálculo pressione enter.");
-				print("Operadores aceitos: +, -, *, /.");
-				print("O cálculo é realizado em ordem sequencial, sem obedecer a regra matemática de ordem das operações.");
-				print("Digite o cálculo:");
-				calculo = scb.nextLine();
-
-				String[] partes = calculo.split(" ");
-				Double[] numeros = new Double[partes.length];
-				String[] operadores = new String[partes.length];
-
-				for (String parte : partes) {
-					try {
-						Double num = Double.parseDouble(parte);
-						numeros[numIndex++] = num;
-					} catch (NumberFormatException e) {
-						operadores[opIndex++] = parte;
-					}
-				}
-
-				for (int i = 0; i < numIndex; i++) {
-					if (operadores[i] != "+"){
-						
-					}
-				}
-
-				/* if (operadores[opIndex] != "+" && operadores[opIndex] != "-" && operadores[opIndex] != "*" && operadores[opIndex] != "/") {
+				while (i == 1) {
+					String calculo = "";
+					int numIndex = 0, opIndex = 0;
+					boolean invalido = false;
 					print("");
-					print("Você digitou um operador inválido");
-				} */
+					print("Digite o cálculo:");
+					calculo = scb.nextLine();
 
-				for (int i = 0; i < numIndex; i++) {
-					print("Número: " + numeros[i]);
-				}
-				for (int i = 0; i < opIndex; i++) {
-					print("Operador: " + operadores[i]);
-				}
-				
+					String[] partes = calculo.split(" ");
+					Double[] numeros = new Double[partes.length];
+					String[] operadores = new String[partes.length];
 
-				exibirMenuContinuar2();
-				try {
-					i = sca.nextInt();
-				} catch (InputMismatchException erro) {
-					print("");
-					print("O valor deve ser um número! Reiniciando calculadora.");
-					sca.nextLine();
-					break;
-				}
+					for (String parte : partes) {
+						try {
+							Double num = Double.parseDouble(parte);
+							numeros[numIndex++] = num;
+						} catch (NumberFormatException e) {
+							operadores[opIndex++] = parte;
+						}
+					}
 
-				if (i == 1) {
-					continue;
-				} else if (i == 2) {
-					passoAPasso = false;
-					break;
-				} else if (i == 3) {
-					passoAPasso = false;
-					continuaCalculadora = false;
-					break;
-				}
+					for (int x = 0; x < opIndex; x++) {
+						if (!operadores[x].equals("+") && (!operadores[x].equals("-")) && (!operadores[x].equals("*")) && (!operadores[x].equals("/"))) {
+							print("");
+							print("Você digitou algo inválido");
+							invalido = true;
+							break;
+						} else if (invalido == false) {
+							if (operadores[x].equals("+")) {
+								resultado = numeros[x] + numeros[x++];
+								print("");
+								print("O resultado é: " + df.format(resultado));
+							}
+						}
+					}
 
-				while (i != 1 && i != 2 && i != 3) {
-					exibirMenuInvalido();
+					
+
+					/*
+					 * for (int i = 0; i < numIndex; i++) {
+					 * print("Número: " + numeros[i]);
+					 * }
+					 * for (int i = 0; i < opIndex; i++) {
+					 * print("Operador: " + operadores[i]);
+					 * }
+					 */
+
+					exibirMenuContinuar2();
 					try {
 						i = sca.nextInt();
 					} catch (InputMismatchException erro) {
@@ -125,9 +109,30 @@ public class Calculadora {
 						break;
 					}
 
-					if (i == 3) {
+					if (i == 2) {
+						passoAPasso = false;
+						break;
+					} else if (i == 3) {
 						passoAPasso = false;
 						continuaCalculadora = false;
+						break;
+					}
+
+					while (i != 1 && i != 2 && i != 3) {
+						exibirMenuInvalido();
+						try {
+							i = sca.nextInt();
+						} catch (InputMismatchException erro) {
+							print("");
+							print("O valor deve ser um número! Reiniciando calculadora.");
+							sca.nextLine();
+							break;
+						}
+
+						if (i == 3) {
+							passoAPasso = false;
+							continuaCalculadora = false;
+						}
 					}
 				}
 
@@ -363,6 +368,14 @@ public class Calculadora {
 		print("1 - Continuar");
 		print("2 - Continuar, mas com o último número");
 		print("3 - Encerrar calculadora");
+	}
+
+	private static void exibirMenuUnicaLinha() {
+		print("");
+		print("Exemplo de como o cálculo deve ser digitado: '10 + 10'; '2 * 10 + 70 / 3'; '1,5 * 10 - 4'.");
+		print("Sempre com espaços entre cada número/operador, ao escrever todo o cálculo pressione enter.");
+		print("Operadores aceitos: +, -, *, /.");
+		print("O cálculo é realizado em ordem sequencial, sem obedecer a regra matemática de ordem das operações.");
 	}
 
 	private static void obterRaizQuadrada(double num) {
