@@ -48,7 +48,7 @@ public class Calculadora {
 			}
 
 			while (umaLinha) { /* inicia calculadora na função única linha */
-				
+
 				int i = 1;
 				exibirMenuUnicaLinha();
 
@@ -73,43 +73,41 @@ public class Calculadora {
 						}
 					}
 
+					boolean primeiroLoop = true;
 					for (int x = 0; x < opIndex; x++) {
-						if (!operadores[x].equals("+") && (!operadores[x].equals("-")) && (!operadores[x].equals("*")) && (!operadores[x].equals("/"))) {
+						if (!operadores[x].equals("+") && (!operadores[x].equals("-"))
+								&& (!operadores[x].equals("*")) && (!operadores[x].equals("/"))) {
 							print("");
 							print("Você digitou algo inválido!");
 							invalido = true;
 							break;
 						} else if (invalido == false) {
-							if (operadores[x].equals("+")) {
-								resultado = numeros[0] + numeros[1];
-								print("");
-								print("O resultado é: " + df.format(resultado));
-							} else if (operadores[x].equals("-")) {
-								resultado = numeros[0] - numeros[1];
-								print("");
-								print("O resultado é: " + df.format(resultado));
-							} else if (operadores[x].equals("*")) {
-								resultado = numeros[0] * numeros[1];
-								print("");
-								print("O resultado é: " + df.format(resultado));
-							} else if (operadores[x].equals("/")) {
-								resultado = numeros[0] / numeros[1];
-								print("");
-								print("O resultado é: " + df.format(resultado));
+							if (primeiroLoop) {
+								resultado = numeros[0];
+								primeiroLoop = false;
+							}
+							switch (operadores[x]) {
+								case "+":
+									resultado = resultado + numeros[x + 1];
+									break;
+								case "-":
+									resultado = resultado - numeros[x + 1];
+									break;
+								case "*":
+									resultado = resultado * numeros[x + 1];
+									break;
+								case "/":
+									resultado = resultado / numeros[x + 1];
+									break;
 							}
 						}
 					}
-
-					
-
-					/*
-					 * for (int i = 0; i < numIndex; i++) {
-					 * print("Número: " + numeros[i]);
-					 * }
-					 * for (int i = 0; i < opIndex; i++) {
-					 * print("Operador: " + operadores[i]);
-					 * }
-					 */
+					if (invalido == true){
+						continue;
+					}else if (invalido == false) {
+						print("");
+						print("O resultado é: " + df.format(resultado));
+					}
 
 					exibirMenuContinuar2();
 					try {
