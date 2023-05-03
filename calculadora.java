@@ -23,7 +23,7 @@ public class Calculadora {
 
 	public static void main(String[] args) {
 
-		try { //apaga o registro de cálculos e reseta a sequência de id 
+		try {    //apaga o registro de cálculos e reseta a sequência de id 
 			// Carrega a classe do driver JDBC
 			Class.forName("oracle.jdbc.OracleDriver");
 			// Conecta ao banco de dados
@@ -32,10 +32,13 @@ public class Calculadora {
 			// Operações desejadas no banco de dados
 			String sql = "DELETE FROM UNICA_LINHA WHERE ID > 0";
 			pstmt = conexao.prepareStatement(sql);
+			pstmt.executeUpdate();
 			sql = "DELETE FROM PASSO_A_PASSO WHERE ID > 0";
 			pstmt = conexao.prepareStatement(sql);
+			pstmt.executeUpdate();
 			sql = "ALTER SEQUENCE IDCALCULO RESTART";
 			pstmt = conexao.prepareStatement(sql);
+			pstmt.executeUpdate();
 			// Fecha a conexão
 			conexao.close();
 		} catch (ClassNotFoundException e) {
@@ -156,7 +159,7 @@ public class Calculadora {
 							conexao = DriverManager.getConnection(
 									"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
 							// Operações desejadas no banco de dados
-							String sql = "INSERT INTO UNICA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, TRUNC(SYSDATE, 'MI'))";
+							String sql = "INSERT INTO UMA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, TRUNC(SYSDATE, 'MI'))";
 							pstmt = conexao.prepareStatement(sql);
 							pstmt.setString(2, calculo);
 							pstmt.setDouble(3, resultado);
@@ -225,8 +228,47 @@ public class Calculadora {
 
 			while (passoAPasso) { // inicia calculadora na função passo a passo
 
+				if (opcao == 5 || opcao == 6 || opcao == 7) {
+					try {
+						// Carrega a classe do driver JDBC
+						Class.forName("oracle.jdbc.OracleDriver");
+						// Conecta ao banco de dados
+						conexao = DriverManager.getConnection(
+								"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+						// Operações desejadas no banco de dados
+						String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, TRUNC(SYSDATE, 'MI'))";
+						pstmt = conexao.prepareStatement(sql);
+						pstmt.setDouble(2, n1);
+						pstmt.setInt(3, opcao);
+						pstmt.setDouble(4, n2);
+						pstmt.setDouble(5, resultado);
+						pstmt.executeUpdate();
+						// Fecha a conexão
+						conexao.close();
+					} catch (ClassNotFoundException e) {
+						System.out.println("Não foi possível carregar o driver JDBC.");
+						e.printStackTrace();
+					} catch (SQLException e) {
+						System.out.println("Não foi possível conectar ao banco de dados.");
+						e.printStackTrace();
+					} finally { // Fecha a conexão e os recursos utilizados
+						try {
+							if (pstmt != null) {
+								pstmt.close();
+							}
+							if (conexao != null) {
+								conexao.close();
+							}
+						} catch (SQLException e) {
+							System.out.println("Erro ao fechar a conexão com o banco de dados.");
+							e.printStackTrace();
+						}
+					}
+				}
+
 				print("");
 				print("Digite o primeiro valor:");
+
 				try {
 					n1 = sca.nextDouble();
 					exibirMenuOperacao();
@@ -317,7 +359,47 @@ public class Calculadora {
 				}
 
 				while (i == 2) { // enquanto quiser continuar com o último valor
+					
+					if (opcao == 5 || opcao == 6 || opcao == 7) {
+						try {
+							// Carrega a classe do driver JDBC
+							Class.forName("oracle.jdbc.OracleDriver");
+							// Conecta ao banco de dados
+							conexao = DriverManager.getConnection(
+									"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+							// Operações desejadas no banco de dados
+							String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, TRUNC(SYSDATE, 'MI'))";
+							pstmt = conexao.prepareStatement(sql);
+							pstmt.setDouble(2, n1);
+							pstmt.setInt(3, opcao);
+							pstmt.setDouble(4, n2);
+							pstmt.setDouble(5, resultado);
+							pstmt.executeUpdate();
+							// Fecha a conexão
+							conexao.close();
+						} catch (ClassNotFoundException e) {
+							System.out.println("Não foi possível carregar o driver JDBC.");
+							e.printStackTrace();
+						} catch (SQLException e) {
+							System.out.println("Não foi possível conectar ao banco de dados.");
+							e.printStackTrace();
+						} finally { // Fecha a conexão e os recursos utilizados
+							try {
+								if (pstmt != null) {
+									pstmt.close();
+								}
+								if (conexao != null) {
+									conexao.close();
+								}
+							} catch (SQLException e) {
+								System.out.println("Erro ao fechar a conexão com o banco de dados.");
+								e.printStackTrace();
+							}
+						}
+					}
+					
 					n3 = resultado;
+
 					try {
 						exibirMenuOperacao();
 						opcao = sca.nextInt();
@@ -357,6 +439,41 @@ public class Calculadora {
 					}
 
 					obterResultado2(n3, n4, resultado);
+					try {
+						// Carrega a classe do driver JDBC
+						Class.forName("oracle.jdbc.OracleDriver");
+						// Conecta ao banco de dados
+						conexao = DriverManager.getConnection(
+								"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+						// Operações desejadas no banco de dados
+						String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, TRUNC(SYSDATE, 'MI'))";
+						pstmt = conexao.prepareStatement(sql);
+						pstmt.setDouble(2, n3);
+						pstmt.setInt(3, opcao);
+						pstmt.setDouble(4, n4);
+						pstmt.setDouble(5, resultado);
+						pstmt.executeUpdate();
+						// Fecha a conexão
+						conexao.close();
+					} catch (ClassNotFoundException e) {
+						System.out.println("Não foi possível carregar o driver JDBC.");
+						e.printStackTrace();
+					} catch (SQLException e) {
+						System.out.println("Não foi possível conectar ao banco de dados.");
+						e.printStackTrace();
+					} finally { // Fecha a conexão e os recursos utilizados
+						try {
+							if (pstmt != null) {
+								pstmt.close();
+							}
+							if (conexao != null) {
+								conexao.close();
+							}
+						} catch (SQLException e) {
+							System.out.println("Erro ao fechar a conexão com o banco de dados.");
+							e.printStackTrace();
+						}
+					}
 
 					exibirMenuContinuar();
 					try {
