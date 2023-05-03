@@ -3,6 +3,10 @@ package calculadora;
 import java.util.Scanner;
 import java.text.DecimalFormat;
 import java.util.InputMismatchException;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.PreparedStatement;
 
 public class Calculadora {
 
@@ -14,9 +18,47 @@ public class Calculadora {
 	static Scanner sca = new Scanner(System.in);
 	static Scanner scb = new Scanner(System.in);
 
+	static Connection conexao = null;
+	static PreparedStatement pstmt = null;
+
 	public static void main(String[] args) {
 
-		while (continuaCalculadora) { /* começo calculadora */
+		try { //apaga o registro de cálculos e reseta a sequência de id 
+			// Carrega a classe do driver JDBC
+			Class.forName("oracle.jdbc.OracleDriver");
+			// Conecta ao banco de dados
+			conexao = DriverManager.getConnection(
+					"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+			// Operações desejadas no banco de dados
+			String sql = "DELETE FROM UNICA_LINHA WHERE ID > 0";
+			pstmt = conexao.prepareStatement(sql);
+			sql = "DELETE FROM PASSO_A_PASSO WHERE ID > 0";
+			pstmt = conexao.prepareStatement(sql);
+			sql = "ALTER SEQUENCE IDCALCULO RESTART";
+			pstmt = conexao.prepareStatement(sql);
+			// Fecha a conexão
+			conexao.close();
+		} catch (ClassNotFoundException e) {
+			System.out.println("Não foi possível carregar o driver JDBC.");
+			e.printStackTrace();
+		} catch (SQLException e) {
+			System.out.println("Não foi possível conectar ao banco de dados.");
+			e.printStackTrace();
+		} finally { // Fecha a conexão e os recursos utilizados
+			try {
+				if (pstmt != null) {
+					pstmt.close();
+				}
+				if (conexao != null) {
+					conexao.close();
+				}
+			} catch (SQLException e) {
+				System.out.println("Erro ao fechar a conexão com o banco de dados.");
+				e.printStackTrace();
+			}
+		}
+
+		while (continuaCalculadora) { // começo calculadora
 
 			df.setMaximumFractionDigits(5);
 			boolean continuaMenuInicial = true, umaLinha = false, passoAPasso = false;
@@ -47,7 +89,7 @@ public class Calculadora {
 				}
 			}
 
-			while (umaLinha) { /* inicia calculadora na função única linha */
+			while (umaLinha) { // inicia calculadora na função única linha
 
 				int i = 1;
 				exibirMenuUnicaLinha();
@@ -102,11 +144,44 @@ public class Calculadora {
 							}
 						}
 					}
-					if (invalido == true){
+					if (invalido == true) {
 						continue;
-					}else if (invalido == false) {
+					} else if (invalido == false) {
 						print("");
 						print("O resultado é: " + df.format(resultado));
+						try {
+							// Carrega a classe do driver JDBC
+							Class.forName("oracle.jdbc.OracleDriver");
+							// Conecta ao banco de dados
+							conexao = DriverManager.getConnection(
+									"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+							// Operações desejadas no banco de dados
+							String sql = "INSERT INTO UNICA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, TRUNC(SYSDATE, 'MI'))";
+							pstmt = conexao.prepareStatement(sql);
+							pstmt.setString(2, calculo);
+							pstmt.setDouble(3, resultado);
+							pstmt.executeUpdate();
+							// Fecha a conexão
+							conexao.close();
+						} catch (ClassNotFoundException e) {
+							System.out.println("Não foi possível carregar o driver JDBC.");
+							e.printStackTrace();
+						} catch (SQLException e) {
+							System.out.println("Não foi possível conectar ao banco de dados.");
+							e.printStackTrace();
+						} finally { // Fecha a conexão e os recursos utilizados
+							try {
+								if (pstmt != null) {
+									pstmt.close();
+								}
+								if (conexao != null) {
+									conexao.close();
+								}
+							} catch (SQLException e) {
+								System.out.println("Erro ao fechar a conexão com o banco de dados.");
+								e.printStackTrace();
+							}
+						}
 					}
 
 					exibirMenuContinuar2();
@@ -148,7 +223,7 @@ public class Calculadora {
 
 			}
 
-			while (passoAPasso) { /* inicia calculadora na função passo a passo */
+			while (passoAPasso) { // inicia calculadora na função passo a passo
 
 				print("");
 				print("Digite o primeiro valor:");
@@ -195,6 +270,41 @@ public class Calculadora {
 				}
 
 				obterResultado(n1, n2, resultado);
+				try {
+					// Carrega a classe do driver JDBC
+					Class.forName("oracle.jdbc.OracleDriver");
+					// Conecta ao banco de dados
+					conexao = DriverManager.getConnection(
+							"jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
+					// Operações desejadas no banco de dados
+					String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, TRUNC(SYSDATE, 'MI'))";
+					pstmt = conexao.prepareStatement(sql);
+					pstmt.setDouble(2, n1);
+					pstmt.setInt(3, opcao);
+					pstmt.setDouble(4, n2);
+					pstmt.setDouble(5, resultado);
+					pstmt.executeUpdate();
+					// Fecha a conexão
+					conexao.close();
+				} catch (ClassNotFoundException e) {
+					System.out.println("Não foi possível carregar o driver JDBC.");
+					e.printStackTrace();
+				} catch (SQLException e) {
+					System.out.println("Não foi possível conectar ao banco de dados.");
+					e.printStackTrace();
+				} finally { // Fecha a conexão e os recursos utilizados
+					try {
+						if (pstmt != null) {
+							pstmt.close();
+						}
+						if (conexao != null) {
+							conexao.close();
+						}
+					} catch (SQLException e) {
+						System.out.println("Erro ao fechar a conexão com o banco de dados.");
+						e.printStackTrace();
+					}
+				}
 
 				exibirMenuContinuar();
 				try {
@@ -206,7 +316,7 @@ public class Calculadora {
 					break;
 				}
 
-				while (i == 2) { /* enquanto quiser continuar com o último valor */
+				while (i == 2) { // enquanto quiser continuar com o último valor
 					n3 = resultado;
 					try {
 						exibirMenuOperacao();
@@ -298,6 +408,7 @@ public class Calculadora {
 
 	}
 
+	
 	// métodos
 
 	private static void print(String texto) {
