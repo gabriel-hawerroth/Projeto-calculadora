@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Calculadora {
 
@@ -48,6 +49,9 @@ public class Calculadora {
                     umaLinha = true;
                     continuaMenuInicial = false;
                 } else if (menuInicial == 3) {
+                    obterHistorico();
+                    continue;
+                } else if (menuInicial == 4) {
                     continuaCalculadora = false;
                     continuaMenuInicial = false;
                 } else {
@@ -334,7 +338,6 @@ public class Calculadora {
     //
     //
     //
-    //
     // métodos
 
     private static void conectarBanco() {
@@ -345,7 +348,7 @@ public class Calculadora {
             conexao = DriverManager.getConnection(
                     "jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
         } catch (ClassNotFoundException e) {
-            System.out.println("Não foi possível carregar o driver JDBC.");
+            print("Não foi possível carregar o driver JDBC.");
             e.printStackTrace();
         } catch (SQLException e) {
             System.out.println("Não foi possível conectar ao banco de dados.");
@@ -363,7 +366,7 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -379,7 +382,7 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -393,7 +396,7 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -403,7 +406,30 @@ public class Calculadora {
             conexao.close();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Não foi possível encerrar a conexão com o Banco de dados.");
+            print("Não foi possível encerrar a conexão com o Banco de dados.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void obterHistorico() {
+        String sql = " SELECT A.NUM1 || ' ' || B.DS_OPERACAO || ' ' || A.NUM2 CALCULO, A.RESULTADO RESULTADO, TO_CHAR(A.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA_REGISTRO FROM PASSO_A_PASSO A LEFT JOIN OPERACOES B ON A.OPERACAO = B.ID_OPERACAO UNION ALL SELECT C.CALCULO CÁLCULO, C.RESULTADO RESULTADO, TO_CHAR(C.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA_REGISTRO FROM UMA_LINHA C ORDER BY 3 ";
+        try {
+            pstmt = conexao.prepareStatement(sql);
+            ResultSet historico = pstmt.executeQuery();
+
+            if (historico.next()) {
+                while (historico.next()) {
+                    String calculo = historico.getString("CALCULO");
+                    String resultado = historico.getString("RESULTADO");
+                    String data_hora = historico.getString("DATA_HORA_REGISTRO");
+                    print("");
+                    print(String.format("%d\t%s\t%d", calculo, resultado, data_hora));
+                }
+            } else {
+                print("");
+                print("Não há cálculos no histórico.");
+            }
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
@@ -462,7 +488,8 @@ public class Calculadora {
         print("Bem vindo!");
         print("1 - Fazer cálculo passo a passo");
         print("2 - Fazer cálculo por conta própria em uma linha");
-        print("3 - Encerrar calculadora");
+        print("3 - Obter histórico de cálculos");
+        print("4 - Encerrar calculadora");
     }
 
     private static void exibirMenuContinuar() {
