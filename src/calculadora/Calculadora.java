@@ -83,6 +83,12 @@ public class Calculadora {
                         }
                     }
 
+                    if (numIndex < 2) {
+                        print("");
+                        print("Cálculo inválido.");
+                        continue;
+                    }
+
                     boolean primeiroLoop = true;
                     for (int x = 0; x < opIndex; x++) {
                         if (!operadores[x].equals("+") && (!operadores[x].equals("-"))
@@ -125,7 +131,7 @@ public class Calculadora {
                         i = sca.nextInt();
                     } catch (InputMismatchException erro) {
                         print("");
-                        print("O valor deve ser um número! Reiniciando calculadora.");
+                        print("O valor deve ser um número! Reiniciando.");
                         sca.nextLine();
                         break;
                     }
@@ -226,7 +232,7 @@ public class Calculadora {
                 while (i == 2) { // enquanto quiser continuar com o último valor
 
                     if (opcao == 5 || opcao == 6 || opcao == 7) {
-                        insereResultados(n3, opcao, 0, resultado);
+                        // insereResultados(n3, opcao, 0, resultado);
                     }
 
                     n3 = resultado;
@@ -348,15 +354,11 @@ public class Calculadora {
     }
 
     private static void limparBanco() {
-        try { // apaga o registro de cálculos com data inferior a 12 horas atrás e reseta a
-              // sequência de id
+        try { // apaga o registro de cálculos com data inferior a 12 horas atrás
             String sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR);";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
             sql = "DELETE FROM PASSO_A_PASSO WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
-            pstmt = conexao.prepareStatement(sql);
-            pstmt.executeUpdate();
-            sql = "ALTER SEQUENCE IDCALCULO RESTART";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
             pstmt.close();
