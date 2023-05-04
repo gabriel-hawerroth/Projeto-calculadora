@@ -57,7 +57,7 @@ public class Calculadora {
                 }
             }
 
-            while (umaLinha) { // inicia calculadora na função única linha
+            while (umaLinha) { // inicia calculadora na função uma linha
 
                 int i = 1;
                 exibirMenuUnicaLinha();
@@ -117,26 +117,7 @@ public class Calculadora {
                     } else if (invalido == false) {
                         print("");
                         print("O resultado é: " + df.format(resultado));
-                        try {
-                            // Carrega a classe do driver JDBC
-                            Class.forName("oracle.jdbc.OracleDriver");
-                            // Conecta ao banco de dados
-                            conexao = DriverManager.getConnection(
-                                    "jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
-                            // Operações desejadas no banco de dados
-                            String sql = "INSERT INTO UMA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, TRUNC(SYSDATE, 'MI'))";
-                            pstmt = conexao.prepareStatement(sql);
-                            pstmt.setString(1, calculo);
-                            pstmt.setDouble(2, resultado);
-                            pstmt.executeUpdate();
-                            pstmt.close();
-                        } catch (ClassNotFoundException e) {
-                            System.out.println("Não foi possível carregar o driver JDBC.");
-                            e.printStackTrace();
-                        } catch (SQLException e) {
-                            System.out.println("Não foi possível conectar ao banco de dados.");
-                            e.printStackTrace();
-                        }
+                        insereResultados2(calculo, resultado);
                     }
 
                     exibirMenuContinuar2();
@@ -343,10 +324,15 @@ public class Calculadora {
 
     }
 
+    //
+    //
+    //
+    //
+    //
     // métodos
 
     private static void conectarBanco() {
-        try { // apaga o registro de cálculos e reseta a sequência de id
+        try { // inicia a conexão com o banco
               // Carrega a classe do driver JDBC
             Class.forName("oracle.jdbc.OracleDriver");
             // Conecta ao banco de dados
@@ -362,59 +348,58 @@ public class Calculadora {
     }
 
     private static void limparBanco() {
-        try { // apaga o registro de cálculos e reseta a sequência de id
-              // Operações desejadas no banco de dados
-            String sql = "DELETE FROM UMA_LINHA WHERE ID > 0";
+        try { // apaga o registro de cálculos com data inferior a 12 horas atrás e reseta a
+              // sequência de id
+            String sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR);";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
-            sql = "DELETE FROM PASSO_A_PASSO WHERE ID > 0";
+            sql = "DELETE FROM PASSO_A_PASSO WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
             sql = "ALTER SEQUENCE IDCALCULO RESTART";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
+            pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Não foi possível conectar ao banco de dados.");
+            System.out.println("Erro no comando SQL.");
             e.printStackTrace();
-        } finally { // Fecha a conexão e os recursos utilizados
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Erro ao fechar a conexão com o banco de dados.");
-                e.printStackTrace();
-            }
         }
     }
 
     private static void insereResultados(double a, int b, double c, double d) {
-        try {
-            String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, TRUNC(SYSDATE, 'MI'))";
+        try { // insere os resultados da função passo a passo
+            String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.setDouble(1, a);
             pstmt.setInt(2, b);
             pstmt.setDouble(3, c);
             pstmt.setDouble(4, d);
             pstmt.executeUpdate();
+            pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Não foi possível conectar ao banco de dados.");
+            System.out.println("Erro no comando SQL.");
             e.printStackTrace();
-        } finally {
-            try {
-                if (pstmt != null) {
-                    pstmt.close();
-                }
-            } catch (SQLException e) {
-                System.out.println("Erro ao fechar a conexão com o banco de dados.");
-                e.printStackTrace();
-            }
+        }
+    }
+
+    private static void insereResultados2(String a, double b) {
+        try { // insere os resultdos da função uma linha
+            String sql = "INSERT INTO UMA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, SYSDATE)";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.setString(1, a);
+            pstmt.setDouble(2, b);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            System.out.println("Erro no comando SQL.");
+            e.printStackTrace();
         }
     }
 
     private static void encerrarConexao() {
-        try {
+        try { // encerra a conexão com o banco e o método prepareStatement
             conexao.close();
+            pstmt.close();
         } catch (SQLException e) {
             System.out.println("Não foi possível encerrar a conexão com o Banco de dados.");
             e.printStackTrace();
