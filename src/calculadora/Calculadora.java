@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 
 public class Calculadora {
 
@@ -48,6 +49,9 @@ public class Calculadora {
                     umaLinha = true;
                     continuaMenuInicial = false;
                 } else if (menuInicial == 3) {
+                    obterHistorico();
+                    continue;
+                } else if (menuInicial == 4) {
                     continuaCalculadora = false;
                     continuaMenuInicial = false;
                 } else {
@@ -81,6 +85,12 @@ public class Calculadora {
                         } catch (NumberFormatException e) {
                             operadores[opIndex++] = parte;
                         }
+                    }
+
+                    if (numIndex < 2) {
+                        print("");
+                        print("Cálculo inválido.");
+                        continue;
                     }
 
                     boolean primeiroLoop = true;
@@ -125,7 +135,7 @@ public class Calculadora {
                         i = sca.nextInt();
                     } catch (InputMismatchException erro) {
                         print("");
-                        print("O valor deve ser um número! Reiniciando calculadora.");
+                        print("O valor deve ser um número! Reiniciando.");
                         sca.nextLine();
                         break;
                     }
@@ -227,7 +237,7 @@ public class Calculadora {
                 while (i == 2) { // enquanto quiser continuar com o último valor
 
                     if (opcao == 5 || opcao == 6 || opcao == 7) {
-                        insereResultados(n3, opcao, 0, resultado);
+                        // insereResultados(n3, opcao, 0, resultado);
                     }
 
                     n3 = resultado;
@@ -329,7 +339,6 @@ public class Calculadora {
     //
     //
     //
-    //
     // métodos
 
     private static void print(String texto) {
@@ -402,7 +411,7 @@ public class Calculadora {
             conexao.close();
             pstmt.close();
         } catch (SQLException e) {
-            print("Não foi possível encerrar a conexão com o Banco de dados.");
+            System.out.println("Não foi possível encerrar a conexão com o Banco de dados.");
             e.printStackTrace();
         }
     }
@@ -426,7 +435,8 @@ public class Calculadora {
         print("Bem vindo!");
         print("1 - Fazer cálculo passo a passo");
         print("2 - Fazer cálculo por conta própria em uma linha");
-        print("3 - Encerrar calculadora");
+        print("3 - Obter histórico de cálculos");
+        print("4 - Encerrar calculadora");
     }
 
     private static void exibirMenuContinuar() {
