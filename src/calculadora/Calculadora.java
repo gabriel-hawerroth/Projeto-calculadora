@@ -14,6 +14,7 @@ public class Calculadora {
     static boolean continuaCalculadora = true;
     static int i, opcao, menuInicial;
     static double resultado = 0, n1, n2, n3, n4;
+    static String result;
 
     static DecimalFormat df = new DecimalFormat("0.#");
     static Scanner sca = new Scanner(System.in);
@@ -221,7 +222,6 @@ public class Calculadora {
                 }
 
                 obterResultado(n1, n2);
-                print("O resultado é: " + resultado);
                 insereResultados(n1, opcao, n2, resultado);
 
                 exibirMenuContinuar();
@@ -235,10 +235,6 @@ public class Calculadora {
                 }
 
                 while (i == 2) { // enquanto quiser continuar com o último valor
-
-                    if (opcao == 5 || opcao == 6 || opcao == 7) {
-                        // insereResultados(n3, opcao, 0, resultado);
-                    }
 
                     n3 = resultado;
 
@@ -267,6 +263,12 @@ public class Calculadora {
                         print("");
                         print("Opção inválida, reiniciando passo a passo.");
                         continue;
+                    }
+
+                    if (opcao == 5 || opcao == 6) {
+                        insereResultadosRaizes(n1, opcao, resultado);
+                    } else if (opcao == 7) {
+                        insereResultadosImparPar(n1, opcao, result);
                     }
 
                     print("");
@@ -376,6 +378,34 @@ public class Calculadora {
         }
     }
 
+    private static void obterHistorico() {
+        String sql = "SELECT A.NUM1 || ' ' || B.DS_OPERACAO || ' ' || A.NUM2 CALCULO, A.RESULTADO RESULTADO, TO_CHAR(A.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM PASSO_A_PASSO A LEFT JOIN OPERACOES B ON A.OPERACAO = B.ID_OPERACAO UNION ALL SELECT C.CALCULO CALCULO, C.RESULTADO RESULTADO, TO_CHAR(C.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM UMA_LINHA C ORDER BY 3";
+        try {
+            pstmt = conexao.prepareStatement(sql);
+            ResultSet historico = pstmt.executeQuery();
+
+            if (historico.next()) {
+                print("");
+                print("Cálculo | Resultado | Data e hora do registro");
+                while (historico.next()) {
+                    String calculo = historico.getString("CALCULO");
+                    String resultado = historico.getString("RESULTADO");
+                    String data_hora = historico.getString("DATA_HORA");
+                    System.out.print(calculo + " | ");
+                    System.out.print("= " + resultado + " | ");
+                    System.out.print(data_hora);
+                    print("");
+                }
+            } else {
+                print("");
+                print("Não há cálculos no histórico.");
+            }
+        } catch (SQLException e) {
+            print("Erro no comando SQL.");
+            e.printStackTrace();
+        }
+    }
+
     private static void insereResultados(double a, int b, double c, double d) {
         try { // insere os resultados da função passo a passo
             String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, SYSDATE)";
@@ -393,11 +423,41 @@ public class Calculadora {
     }
 
     private static void insereResultados2(String a, double b) {
-        try { // insere os resultdos da função uma linha
+        try { // insere os resultados da função uma linha
             String sql = "INSERT INTO UMA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.setString(1, a);
             pstmt.setDouble(2, b);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            print("Erro no comando SQL.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void insereResultadosImparPar(double a, int b, String c) {
+        try { // insere os resultados da função passo a passo
+            String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, SYSDATE)";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.setDouble(1, a);
+            pstmt.setInt(2, b);
+            pstmt.setString(3, c);
+            pstmt.executeUpdate();
+            pstmt.close();
+        } catch (SQLException e) {
+            print("Erro no comando SQL.");
+            e.printStackTrace();
+        }
+    }
+
+    private static void insereResultadosRaizes(double a, int b, Double c) {
+        try { // insere os resultados da função passo a passo
+            String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, SYSDATE)";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.setDouble(1, a);
+            pstmt.setInt(2, b);
+            pstmt.setDouble(3, c);
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
@@ -483,7 +543,8 @@ public class Calculadora {
             int x;
             print("");
             print("1 - Continuar");
-            print("2 - Encerrar calculadora");
+            print("2 - Voltar para o menu inicial");
+            print("3 - Encerrar calculadora");
             try {
                 x = sca.nextInt();
             } catch (InputMismatchException erro) {
@@ -498,6 +559,11 @@ public class Calculadora {
             } else if (x == 2) {
                 i = 3;
                 continuaRaizQuadrada = false;
+
+            } else if (x == 3) {
+                i = 4;
+                continuaRaizQuadrada = false;
+
             } else {
                 print("");
                 print("Opção inválida.");
@@ -519,7 +585,8 @@ public class Calculadora {
             double x;
             print("");
             print("1 - Continuar");
-            print("2 - Encerrar calculadora");
+            print("2 - Voltar para o menu inicial");
+            print("3 - Encerrar calculadora");
             try {
                 x = sca.nextDouble();
             } catch (InputMismatchException erro) {
@@ -534,6 +601,11 @@ public class Calculadora {
             } else if (x == 2) {
                 i = 3;
                 continuaRaizCubica = false;
+
+            } else if (x == 3) {
+                i = 4;
+                continuaRaizCubica = false;
+
             } else {
                 print("");
                 print("Opção inválida.");
@@ -545,13 +617,15 @@ public class Calculadora {
     private static void obterImparPar(double num) {
 
         boolean continuaImparPar = true;
-        resultado = num % 2;
+        double n0 = num % 2;
         print("");
 
-        if (resultado == 1) {
+        if (n0 == 1) {
             print("O número " + df.format(num) + " é ímpar.");
-        } else if (resultado == 0) {
+            result = "ímpar";
+        } else if (n0 == 0) {
             print("O número " + df.format(num) + " é par.");
+            result = "par";
         } else {
             print("A definição de ímpar ou par se aplica apenas a números inteiros.");
         }
@@ -560,7 +634,8 @@ public class Calculadora {
             double x;
             print("");
             print("1 - Continuar");
-            print("2 - Encerrar calculadora");
+            print("2 - Voltar para o menu inicial");
+            print("3 - Encerrar calculadora");
             try {
                 x = sca.nextDouble();
             } catch (InputMismatchException erro) {
@@ -575,6 +650,11 @@ public class Calculadora {
             } else if (x == 2) {
                 i = 3;
                 continuaImparPar = false;
+
+            } else if (x == 3) {
+                i = 4;
+                continuaImparPar = false;
+
             } else {
                 print("");
                 print("Opção inválida.");
