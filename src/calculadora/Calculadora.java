@@ -194,8 +194,8 @@ public class Calculadora {
                 } else if (opcao <= 0 || opcao >= 9) {
                     print("");
                     print("Opção inválida, reiniciando passo a passo.");
-                    System.out.println("");
-                    System.out.println("Opção inválida, reiniciando.");
+                    print("");
+                    print("Opção inválida, reiniciando.");
                     continue;
                 }
 
@@ -210,7 +210,8 @@ public class Calculadora {
                     continue;
                 }
 
-                obterResultado(n1, n2, resultado);
+                obterResultado(n1, n2);
+                print("O resultado é: " + resultado);
                 insereResultados(n1, opcao, n2, resultado);
 
                 exibirMenuContinuar();
@@ -269,7 +270,7 @@ public class Calculadora {
                         continue;
                     }
 
-                    obterResultado2(n3, n4, resultado);
+                    obterResultado2(n3, n4);
                     insereResultados(n3, opcao, n4, resultado);
 
                     exibirMenuContinuar();
@@ -331,6 +332,10 @@ public class Calculadora {
     //
     // métodos
 
+    private static void print(String texto) {
+        System.out.println(texto);
+    }
+
     private static void conectarBanco() {
         try { // inicia a conexão com o banco
               // Carrega a classe do driver JDBC
@@ -339,29 +344,25 @@ public class Calculadora {
             conexao = DriverManager.getConnection(
                     "jdbc:oracle:thin:@//localhost:1521/XEPDB1", "gabriel", "123");
         } catch (ClassNotFoundException e) {
-            System.out.println("Não foi possível carregar o driver JDBC.");
+            print("Não foi possível carregar o driver JDBC.");
             e.printStackTrace();
         } catch (SQLException e) {
-            System.out.println("Não foi possível conectar ao banco de dados.");
+            print("Não foi possível conectar ao banco de dados.");
             e.printStackTrace();
         }
     }
 
     private static void limparBanco() {
-        try { // apaga o registro de cálculos com data inferior a 12 horas atrás e reseta a
-              // sequência de id
-            String sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR);";
+        try { // apaga o registro de cálculos com data inferior a 12 horas atrás
+            String sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
             sql = "DELETE FROM PASSO_A_PASSO WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
-            sql = "ALTER SEQUENCE IDCALCULO RESTART";
-            pstmt = conexao.prepareStatement(sql);
-            pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -377,7 +378,7 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -391,7 +392,7 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Erro no comando SQL.");
+            print("Erro no comando SQL.");
             e.printStackTrace();
         }
     }
@@ -401,44 +402,9 @@ public class Calculadora {
             conexao.close();
             pstmt.close();
         } catch (SQLException e) {
-            System.out.println("Não foi possível encerrar a conexão com o Banco de dados.");
+            print("Não foi possível encerrar a conexão com o Banco de dados.");
             e.printStackTrace();
         }
-    }
-
-    private static void print(String texto) {
-        System.out.println(texto);
-    }
-
-    private static double somar(double a, double b) {
-        return a + b;
-    }
-
-    private static double subtrair(double a, double b) {
-        return a - b;
-    }
-
-    private static double multiplicar(double a, double b) {
-        return a * b;
-    }
-
-    private static double dividir(double a, double b) {
-        if (b == 0) {
-            throw new IllegalArgumentException("Não é possível dividir por zero");
-        }
-        return a / b;
-    }
-
-    private static double impar_par(double a) {
-        return a % 2;
-    }
-
-    private static double raizQuadrada(double a) {
-        return Math.sqrt(a);
-    }
-
-    private static double raizCubica(double a) {
-        return Math.cbrt(a);
     }
 
     private static void exibirMenuOperacao() {
@@ -452,7 +418,7 @@ public class Calculadora {
         print("7 - Ímpar/par");
         print("8 - Voltar para o menu inicial");
         print("");
-        print("Digite o número da operação desejada: ");
+        System.out.print("Digite o número da operação desejada: ");
     }
 
     private static void exibirMenuInicial() {
@@ -495,13 +461,11 @@ public class Calculadora {
     }
 
     private static void obterRaizQuadrada(double num) {
+        print("");
         if (num - (int) num == 0) {
-            resultado = raizQuadrada(num);
-            print("");
-            print(
-                    "A raiz quadrada de " + df.format(num) + " é " + df.format(resultado) + ".");
+            resultado = Math.sqrt(num);
+            print("A raiz quadrada de " + df.format(num) + " é " + df.format(resultado) + ".");
         } else {
-            print("");
             print("Só é possível calcular a raiz quadrada de um número inteiro.");
         }
         boolean continuaRaizQuadrada = true;
@@ -533,13 +497,11 @@ public class Calculadora {
     }
 
     private static void obterRaizCubica(double num) {
+        print("");
         if (num - (int) num == 0) {
-            resultado = raizCubica(num);
-            print("");
-            System.out
-                    .println("A raiz cúbica de " + df.format(num) + " é " + df.format(resultado) + ".");
+            resultado = Math.cbrt(num);
+            print("A raiz cúbica de " + df.format(num) + " é " + df.format(resultado) + ".");
         } else {
-            print("");
             print("Só é possível calcular a raiz cúbica de um número inteiro.");
         }
         boolean continuaRaizCubica = true;
@@ -573,7 +535,7 @@ public class Calculadora {
     private static void obterImparPar(double num) {
 
         boolean continuaImparPar = true;
-        resultado = impar_par(num);
+        resultado = num % 2;
         print("");
 
         if (resultado == 1) {
@@ -612,82 +574,72 @@ public class Calculadora {
 
     }
 
-    private static void obterResultado(double num1, double num2, double result) {
+    private static void obterResultado(double num1, double num2) {
+        print("");
         switch (opcao) {
             case 1:
-                result = somar(num1, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = num1 + num2;
+                print("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 2:
-                result = subtrair(num1, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = num1 - num2;
+                print("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 3:
-                result = multiplicar(num1, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = num1 * num2;
+                print("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 4:
-                result = dividir(num1, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                if (num2 == 0) {
+                    throw new IllegalArgumentException("Não é possível dividir por zero");
+                } else {
+                    resultado = num1 / num2;
+                    print("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
+                            + df.format(resultado));
+                }
                 break;
 
             default:
-                print("");
                 print("Inválido.");
                 i = 4;
         }
-        resultado = result;
     }
 
-    private static void obterResultado2(double num1, double num2, double result) {
+    private static void obterResultado2(double num1, double num2) {
+        print("");
         switch (opcao) {
             case 1:
-                result = somar(result, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = resultado + num2;
+                print("O resultado de " + df.format(num1) + " + " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 2:
-                result = subtrair(result, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = resultado - num2;
+                print("O resultado de " + df.format(num1) + " - " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 3:
-                result = multiplicar(result, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                resultado = resultado * num2;
+                print("O resultado de " + df.format(num1) + " * " + df.format(num2) + " é igual a: "
+                        + df.format(resultado));
                 break;
             case 4:
-                result = dividir(result, num2);
-                print("");
-                System.out
-                        .println("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
-                                + df.format(result));
+                if (num2 == 0) {
+                    throw new IllegalArgumentException("Não é possível dividir por zero");
+                } else {
+                    resultado = resultado / num2;
+                    print("O resultado de " + df.format(num1) + " / " + df.format(num2) + " é igual a: "
+                            + df.format(resultado));
+                }
                 break;
 
             default:
-                print("");
                 print("Inválido.");
                 i = 4;
         }
-        resultado = result;
     }
 
 }
