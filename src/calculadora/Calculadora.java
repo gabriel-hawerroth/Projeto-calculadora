@@ -11,10 +11,10 @@ import java.sql.ResultSet;
 
 public class Calculadora {
 
-    static boolean continuaCalculadora = true;
+    static boolean continuaCalculadora = true, registroNoHistorico = false;
     static int i, opcao, menuInicial;
     static double resultado = 0, n1, n2, n3, n4;
-    static String result;
+    static String result, sql;
 
     static DecimalFormat df = new DecimalFormat("0.#");
     static Scanner sca = new Scanner(System.in);
@@ -172,8 +172,18 @@ public class Calculadora {
 
             while (passoAPasso) { // inicia calculadora na função passo a passo
 
-                if (opcao == 5 || opcao == 6 || opcao == 7) {
-                    insereResultados(n1, opcao, n2, resultado);
+                if (i == 3) {
+                    passoAPasso = false;
+                    break;
+                } else if (i == 4) {
+                    passoAPasso = false;
+                    continuaCalculadora = false;
+                    break;
+                }
+                if (opcao == 5 || opcao == 6) {
+                    insereResultadosRaizes(n1, opcao, resultado);
+                } else if (opcao == 7) {
+                    insereResultadosImparPar(n1, opcao, result);
                 }
 
                 print("");
@@ -365,7 +375,7 @@ public class Calculadora {
 
     private static void limparBanco() {
         try { // apaga o registro de cálculos com data inferior a 12 horas atrás
-            String sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
+            sql = "DELETE FROM UMA_LINHA WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
             pstmt = conexao.prepareStatement(sql);
             pstmt.executeUpdate();
             sql = "DELETE FROM PASSO_A_PASSO WHERE DATA_HORA < (SYSDATE - INTERVAL '12' HOUR)";
@@ -373,35 +383,41 @@ public class Calculadora {
             pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao limpar os registros.");
             e.printStackTrace();
         }
     }
 
     private static void obterHistorico() {
-        String sql = "SELECT A.NUM1 || ' ' || B.DS_OPERACAO || ' ' || A.NUM2 CALCULO, A.RESULTADO RESULTADO, TO_CHAR(A.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM PASSO_A_PASSO A LEFT JOIN OPERACOES B ON A.OPERACAO = B.ID_OPERACAO UNION ALL SELECT C.CALCULO CALCULO, C.RESULTADO RESULTADO, TO_CHAR(C.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM UMA_LINHA C ORDER BY 3";
+        sql = "COMMIT";
+        try {
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            print("Erro ao executar o commit.");
+            e.printStackTrace();
+        }
+        sql = "SELECT A.NUM1 || ' ' || B.DS_OPERACAO || ' ' || A.NUM2 CALCULO, A.RESULTADO RESULTADO, TO_CHAR(A.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM PASSO_A_PASSO A LEFT JOIN OPERACOES B ON A.OPERACAO = B.ID_OPERACAO UNION ALL SELECT C.CALCULO CALCULO, C.RESULTADO RESULTADO, TO_CHAR(C.DATA_HORA, 'DD/MM/YYYY HH24:MI:SS') DATA_HORA FROM UMA_LINHA C ORDER BY 3";
         try {
             pstmt = conexao.prepareStatement(sql);
             ResultSet historico = pstmt.executeQuery();
-
-            if (historico.next()) {
+            print("");
+            print("Cálculo | Resultado | Data e hora do registro");
+            while (historico.next()) {
+                registroNoHistorico = true;
+                String calculo = historico.getString("CALCULO");
+                String resultado2 = historico.getString("RESULTADO");
+                String data_hora = historico.getString("DATA_HORA");
+                System.out.print(calculo + " | ");
+                System.out.print("= " + resultado2 + " | ");
+                System.out.print(data_hora);
                 print("");
-                print("Cálculo | Resultado | Data e hora do registro");
-                while (historico.next()) {
-                    String calculo = historico.getString("CALCULO");
-                    String resultado = historico.getString("RESULTADO");
-                    String data_hora = historico.getString("DATA_HORA");
-                    System.out.print(calculo + " | ");
-                    System.out.print("= " + resultado + " | ");
-                    System.out.print(data_hora);
-                    print("");
-                }
-            } else {
-                print("");
+            }
+            if (registroNoHistorico == false) {
                 print("Não há cálculos no histórico.");
             }
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao obter o histórico.");
             e.printStackTrace();
         }
     }
@@ -415,9 +431,12 @@ public class Calculadora {
             pstmt.setDouble(3, c);
             pstmt.setDouble(4, d);
             pstmt.executeUpdate();
+            sql = "COMMIT";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao inserir os resultados da função passo a passo.");
             e.printStackTrace();
         }
     }
@@ -429,9 +448,12 @@ public class Calculadora {
             pstmt.setString(1, a);
             pstmt.setDouble(2, b);
             pstmt.executeUpdate();
+            sql = "COMMIT";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao inserir os resultados da função uma linha.");
             e.printStackTrace();
         }
     }
@@ -444,9 +466,12 @@ public class Calculadora {
             pstmt.setInt(2, b);
             pstmt.setString(3, c);
             pstmt.executeUpdate();
+            sql = "COMMIT";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao inserir os resultados da função Ímpar / par.");
             e.printStackTrace();
         }
     }
@@ -459,14 +484,25 @@ public class Calculadora {
             pstmt.setInt(2, b);
             pstmt.setDouble(3, c);
             pstmt.executeUpdate();
+            sql = "COMMIT";
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
             pstmt.close();
         } catch (SQLException e) {
-            print("Erro no comando SQL.");
+            print("Erro ao inserir os resultados da função raízes.");
             e.printStackTrace();
         }
     }
 
     private static void encerrarConexao() {
+        sql = "COMMIT";
+        try {
+            pstmt = conexao.prepareStatement(sql);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            print("Erro ao executar o commit.");
+            e.printStackTrace();
+        }
         try { // encerra a conexão com o banco e o método prepareStatement
             conexao.close();
             pstmt.close();
@@ -650,7 +686,6 @@ public class Calculadora {
             } else if (x == 2) {
                 i = 3;
                 continuaImparPar = false;
-
             } else if (x == 3) {
                 i = 4;
                 continuaImparPar = false;
