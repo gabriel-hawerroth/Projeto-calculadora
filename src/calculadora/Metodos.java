@@ -56,10 +56,10 @@ public class Metodos {
 
     public static void menuInicial(boolean continuaMenuInicial, int menuInicial, boolean passoAPasso, boolean umaLinha,
             boolean registroNoHistorico, boolean continuaCalculadora) {
-        print("");
-        print("Bem vindo!");
+
+        continuaMenuInicial = true;
         while (continuaMenuInicial) {
-            Metodos.exibirMenuInicial();
+            exibirMenuInicial();
             try {
                 menuInicial = sca.nextInt();
             } catch (InputMismatchException erro) {
@@ -86,6 +86,12 @@ public class Metodos {
                 continue;
             }
         }
+        Calculadora.continuaMenuInicial = continuaMenuInicial;
+        Calculadora.menuInicial = menuInicial;
+        Calculadora.passoAPasso = passoAPasso;
+        Calculadora.umaLinha = umaLinha;
+        Calculadora.registroNoHistorico = registroNoHistorico;
+        Calculadora.continuaCalculadora = continuaCalculadora;
     }
 
     public static void obterHistorico(boolean registroNoHistorico) {
@@ -120,16 +126,17 @@ public class Metodos {
             print("Erro ao obter o histórico.");
             e.printStackTrace();
         }
+        Calculadora.registroNoHistorico = registroNoHistorico;
     }
 
-    public static void inserirResultados(double a, int b, double c, double d) {
+    public static void inserirResultados(double n1, int opcao, double n2, double resultado) {
         try { // insere os resultados da função passo a passo
             String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, NUM2, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
-            pstmt.setDouble(1, a);
-            pstmt.setInt(2, b);
-            pstmt.setDouble(3, c);
-            pstmt.setDouble(4, d);
+            pstmt.setDouble(1, n1);
+            pstmt.setInt(2, opcao);
+            pstmt.setDouble(3, n2);
+            pstmt.setDouble(4, resultado);
             pstmt.executeUpdate();
             sql = "COMMIT";
             pstmt = conexao.prepareStatement(sql);
@@ -141,12 +148,12 @@ public class Metodos {
         }
     }
 
-    public static void inserirResultados2(String a, double b) {
+    public static void inserirResultados2(String calculo, double resultado) {
         try { // insere os resultados da função uma linha
             String sql = "INSERT INTO UMA_LINHA (ID, CALCULO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
-            pstmt.setString(1, a);
-            pstmt.setDouble(2, b);
+            pstmt.setString(1, calculo);
+            pstmt.setDouble(2, resultado);
             pstmt.executeUpdate();
             sql = "COMMIT";
             pstmt = conexao.prepareStatement(sql);
@@ -158,13 +165,13 @@ public class Metodos {
         }
     }
 
-    public static void inserirResultadosImparPar(double a, int b, String c) {
+    public static void inserirResultadosImparPar(double n1, int opcao, String result) {
         try { // insere os resultados da função passo a passo
             String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
-            pstmt.setDouble(1, a);
-            pstmt.setInt(2, b);
-            pstmt.setString(3, c);
+            pstmt.setDouble(1, n1);
+            pstmt.setInt(2, opcao);
+            pstmt.setString(3, result);
             pstmt.executeUpdate();
             sql = "COMMIT";
             pstmt = conexao.prepareStatement(sql);
@@ -176,13 +183,13 @@ public class Metodos {
         }
     }
 
-    public static void inserirResultadosRaizes(double a, int b, Double c) {
+    public static void inserirResultadosRaizes(double n1, int opcao, Double resultado) {
         try { // insere os resultados da função passo a passo
             String sql = "INSERT INTO PASSO_A_PASSO (ID, NUM1, OPERACAO, RESULTADO, DATA_HORA) VALUES (idcalculo.nextval, ?, ?, ?, SYSDATE)";
             pstmt = conexao.prepareStatement(sql);
-            pstmt.setDouble(1, a);
-            pstmt.setInt(2, b);
-            pstmt.setDouble(3, c);
+            pstmt.setDouble(1, n1);
+            pstmt.setInt(2, opcao);
+            pstmt.setDouble(3, resultado);
             pstmt.executeUpdate();
             sql = "COMMIT";
             pstmt = conexao.prepareStatement(sql);
@@ -212,10 +219,10 @@ public class Metodos {
         }
     }
 
-    public static void encerrarCalculadora(boolean continuaCalculadora) {
+    public static void encerrarCalculadora() {
         print("");
         print("Calculadora encerrada.");
-        continuaCalculadora = false;
+        Calculadora.continuaCalculadora = false;
         sca.close();
         scb.close();
     }
@@ -313,6 +320,9 @@ public class Metodos {
                 continue;
             }
         }
+        Calculadora.n1 = num;
+        Calculadora.resultado = resultado;
+        Calculadora.i = i;
     }
 
     public static void obterRaizCubica(double num, Double resultado, int i) {
@@ -355,6 +365,9 @@ public class Metodos {
                 continue;
             }
         }
+        Calculadora.n1 = num;
+        Calculadora.resultado = resultado;
+        Calculadora.i = i;
     }
 
     public static void obterImparPar(double num, String result, int i) {
@@ -403,6 +416,9 @@ public class Metodos {
                 continue;
             }
         }
+        Calculadora.n1 = num;
+        Calculadora.result = result;
+        Calculadora.i = i;
 
     }
 
@@ -438,6 +454,11 @@ public class Metodos {
                 print("Inválido.");
                 i = 4;
         }
+        Calculadora.n1 = num1;
+        Calculadora.n2 = num2;
+        Calculadora.opcao = opcao;
+        Calculadora.resultado = resultado;
+        Calculadora.i = i;
     }
 
     public static void obterResultado2(double num1, double num2, int opcao, double resultado, int i) {
@@ -472,6 +493,11 @@ public class Metodos {
                 print("Inválido.");
                 i = 4;
         }
+        Calculadora.n1 = num1;
+        Calculadora.n2 = num2;
+        Calculadora.opcao = opcao;
+        Calculadora.resultado = resultado;
+        Calculadora.i = i;
     }
 
 }

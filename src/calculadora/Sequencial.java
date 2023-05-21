@@ -115,6 +115,7 @@ public class Sequencial {
                     continue;
                 } else if (opcao == 8) {
                     passoAPasso = false;
+                    Calculadora.continuaMenuInicial = true;
                     break;
                 } else if (opcao <= 0 || opcao >= 9) {
                     print("");
@@ -182,6 +183,18 @@ public class Sequencial {
                 }
             }
         }
+
+        Calculadora.resultado = resultado;
+        Calculadora.umaLinha = umaLinha;
+        Calculadora.continuaCalculadora = continuaCalculadora;
+        Calculadora.i = i;
+        Calculadora.passoAPasso = passoAPasso;
+        Calculadora.opcao = opcao;
+        Calculadora.n1 = n1;
+        Calculadora.n2 = n2;
+        Calculadora.n3 = n3;
+        Calculadora.n4 = n4;
+        Calculadora.result = result;
 
     }
 }

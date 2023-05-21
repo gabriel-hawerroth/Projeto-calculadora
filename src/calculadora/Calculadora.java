@@ -12,6 +12,8 @@ public class Calculadora {
 
         Metodos.conectarBanco();
         Metodos.limparBanco();
+        System.out.println("");
+        System.out.println("Bem vindo!");
 
         while (continuaCalculadora) { // começo calculadora
 
@@ -24,13 +26,11 @@ public class Calculadora {
             } else if (passoAPasso) { // inicia calculadora na função passo a passo
                 Sequencial.sequencial(resultado, umaLinha, continuaCalculadora, i, passoAPasso, opcao, n1, n2, n3, n4,
                         result);
-            } else {
-                System.out.println("Erro");
             }
         }
 
         Metodos.encerrarConexaoBanco();
-        Metodos.encerrarCalculadora(continuaCalculadora);
+        Metodos.encerrarCalculadora();
 
     }
 

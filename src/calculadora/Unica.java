@@ -120,5 +120,10 @@ public class Unica {
                 }
             }
         }
+
+        Calculadora.resultado = resultado;
+        Calculadora.umaLinha = umaLinha;
+        Calculadora.continuaCalculadora = continuaCalculadora;
+
     }
 }
